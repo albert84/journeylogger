@@ -15,7 +15,6 @@ log = "testlog.txt"
 class Journey(object):
     def __init__(self,date,destination,origin,mode,log):
         self.date = date        
-        #self.today = today        
         self.destination = destination
         self.origin = origin
         self.mode = mode
@@ -64,34 +63,20 @@ class Journey(object):
         with open(self.log, "a") as self.log:
             self.log.write("\r\n%s,%s,%s,%s,%s,%s" %(str(self.date),self.mode,str(cost),owe,str(disc),str(cycleBenefit)))
         return      
-    #def addToDict
-#
-#class JourneyLogWriter(Journey):
-#    def __init__(self,cost,owe):
-#        self.cost = cost
-#        self.owe = owe
-##        self.destination = destination
-##        self.origin = origin
-##        self.mode = mode
-##        self.log = log
-#    def writeJourneyToLog(self,cost,owe):
-#        with open(self.log, "a") as self.log:
-#            #if self.date=="":
-#                #self.date=self.today
-#            self.log.write("\r\n%s,%s,%s,%s" %(str(self.date),self.mode,str(cost),owe))
-#        return 
 
-input_journey = raw_input("Input today's mode of journey to work: ")
-       
-my_journey=Journey(today,"work","home",input_journey,log)
+date_check = raw_input("Logging today's journey? (y/n) [Y]:")
+if not date_check=="":
+    date = raw_input("Enter Date (YYYY-MM-DD):")
+    
+date= date or today
 
-#my_journey=Journey(today,"work","home","Lift with Pete",log)
+input_journey = raw_input("Input today's mode of journey to work: [Lift with Andy]")
+input_journey = input_journey or "Lift with Andy"
 
-#print my_journey.printJourney()
+      
+my_journey=Journey(date,"work","home",input_journey,log)
+
 cost_owe = my_journey.calculateCost()
-
-
-#print cost_owe
 
 if input_journey =="Train":
     discount = my_journey.calcTrainDiscount(cost_owe[0])
@@ -106,8 +91,10 @@ else:
 my_journey.writeJourneyToLog(cost_owe[0],cost_owe[1],discount,cycleBenefit)
 
 
-homebound = raw_input("Input today's mode of journey home from work: ")
-my_home_journey=Journey(today,"home","work",homebound,log)
+homebound = raw_input("Input today's mode of journey home from work: [Lift with Andy] ")
+homebound = homebound or "Lift with Andy"
+
+my_home_journey=Journey(date,"home","work",homebound,log)
 cost_owe_home=my_home_journey.calculateCost()
 if homebound=="Train":
     discount = my_home_journey.calcTrainDiscount(cost_owe_home[0])
