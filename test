@@ -1,0 +1,123 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This temporary script file is located here:
+/home/albert/.spyder2/.temp.py
+"""
+import sys
+from datetime import date
+today = date.today()
+
+log = "testlog.txt"
+
+
+class Journey(object):
+    def __init__(self,date,destination,origin,mode,log):
+        self.date = date        
+        #self.today = today        
+        self.destination = destination
+        self.origin = origin
+        self.mode = mode
+        self.log = log
+      
+    def printJourney(self):
+        return ("Date = %s, Mode = %s" %(str(self.date),self.mode))
+        
+    def calculateCost(self):
+        if self.mode=="Lift with Andy":
+            cost=1.5
+            owe="Andy"
+            return cost, owe
+        elif self.mode=="Lift with Pete":
+            cost=1.5
+            owe="Pete"
+            return cost,owe
+        elif self.mode=="Lift with James":
+            number_in_car=raw_input("Enter number of people in James' car: " )
+            cost=6/(1+float(number_in_car))
+            owe="James"            
+            return cost,owe
+        elif self.mode=="Train":
+            cost=raw_input("Enter cost of train ticket: ")
+            print "Train cost £%s"%str(cost)
+            owe ="n/a"
+            return cost,owe
+        elif self.mode=="Cycle":
+            cost="0"
+            owe="n/a"
+            miles=raw_input("Enter number of miles cycled: ")
+            return cost,owe,miles
+        else:
+            print "Not a valid mode of transport"
+            sys.exit()
+            
+    def calcTrainDiscount(self,cost):
+        disc=float(cost)*0.25
+        return disc
+    
+    def calcCycleMiles(self,miles):
+        cycleBenefit=float(miles)*0.2
+        return cycleBenefit
+        
+    def writeJourneyToLog(self,cost,owe,disc,cycleBenefit):
+        with open(self.log, "a") as self.log:
+            self.log.write("\r\n%s,%s,%s,%s,%s,%s" %(str(self.date),self.mode,str(cost),owe,str(disc),str(cycleBenefit)))
+        return      
+    #def addToDict
+#
+#class JourneyLogWriter(Journey):
+#    def __init__(self,cost,owe):
+#        self.cost = cost
+#        self.owe = owe
+##        self.destination = destination
+##        self.origin = origin
+##        self.mode = mode
+##        self.log = log
+#    def writeJourneyToLog(self,cost,owe):
+#        with open(self.log, "a") as self.log:
+#            #if self.date=="":
+#                #self.date=self.today
+#            self.log.write("\r\n%s,%s,%s,%s" %(str(self.date),self.mode,str(cost),owe))
+#        return 
+
+input_journey = raw_input("Input today's mode of journey to work: ")
+       
+my_journey=Journey(today,"work","home",input_journey,log)
+
+#my_journey=Journey(today,"work","home","Lift with Pete",log)
+
+#print my_journey.printJourney()
+cost_owe = my_journey.calculateCost()
+
+
+#print cost_owe
+
+if input_journey =="Train":
+    discount = my_journey.calcTrainDiscount(cost_owe[0])
+    print "train disc = %s" %str(discount)
+else:
+    discount = 0
+if input_journey == "Cycle":
+    cycleBenefit = my_journey.calcCycleMiles(cost_owe[2])
+    print "cycle ben = %s" %cycleBenefit
+else:
+    cycleBenefit = 0
+my_journey.writeJourneyToLog(cost_owe[0],cost_owe[1],discount,cycleBenefit)
+
+
+homebound = raw_input("Input today's mode of journey home from work: ")
+my_home_journey=Journey(today,"home","work",homebound,log)
+cost_owe_home=my_home_journey.calculateCost()
+if homebound=="Train":
+    discount = my_home_journey.calcTrainDiscount(cost_owe_home[0])
+    print "train disc = %s" %str(discount)
+else:
+    discount = 0
+if homebound == "Cycle":
+    cycleBenefit_home = my_home_journey.calcCycleMiles(cost_owe_home[2])
+    print "cycle ben = %s" %cycleBenefit_home
+else:
+    cycleBenefit=0
+my_home_journey.writeJourneyToLog(cost_owe_home[0],cost_owe_home[1],discount,cycleBenefit)
+    
